@@ -6,7 +6,7 @@
       become: yes
     - name: copy the nginx config file
       copy:
-        src: ./ansible/nginx/server.conf
+        src: server.conf
         dest: /etc/nginx/conf.d/server.conf
       become: yes
     - name: start nginx
