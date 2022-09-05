@@ -127,7 +127,7 @@ resource "aws_lb_target_group" "nginx" {
 
 resource "aws_autoscaling_attachment" "nginx" {
   autoscaling_group_name = aws_autoscaling_group.nginx.id
-  alb_target_group_arn   = aws_lb_target_group.nginx.arn
+  lb_target_group_arn   = aws_lb_target_group.nginx.arn
 }
 
 resource "aws_security_group" "nginx_instance" {
