@@ -4,6 +4,11 @@
     - name: ensure nginx is at the latest version
       yum: name=nginx state=latest
       become: yes
+    - name: copy the nginx config file
+      copy:
+        src: ./ansible/nginx/server.conf
+        dest: /etc/nginx/conf.d/server.conf
+      become: yes
     - name: start nginx
       service:
           name: nginx
