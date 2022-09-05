@@ -9,6 +9,11 @@
         src: server.conf
         dest: /etc/nginx/conf.d/server.conf
       become: yes
+    - name: copy the sample page
+      copy:
+        src: index.html
+        dest: /usr/share/nginx/html/index.html
+      become: yes
     - name: start nginx
       service:
           name: nginx
