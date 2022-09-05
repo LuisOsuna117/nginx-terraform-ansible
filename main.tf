@@ -27,10 +27,49 @@ data "aws_ami" "amazon-linux" {
   }
 }
 
+
+
+resource "aws_iam_role" "cw_role" {
+  name = "cwa_role"
+  path = "/"
+  assume_role_policy = jsonencode({
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "cloudwatch:PutMetricData",
+                "ec2:DescribeVolumes",
+                "ec2:DescribeTags",
+                "logs:PutLogEvents",
+                "logs:DescribeLogStreams",
+                "logs:DescribeLogGroups",
+                "logs:CreateLogStream",
+                "logs:CreateLogGroup"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ssm:GetParameter"
+            ],
+            "Resource": "arn:aws:ssm:*:*:parameter/AmazonCloudWatch-*"
+        }
+    ]
+  })
+}
+
+resource "aws_iam_instance_profile" "cwa_profile" {
+  name = "cwa_profile"
+  role = aws_iam_role.cw_role.name
+}
+
 resource "aws_launch_configuration" "nginx" {
   name_prefix     = "nginx-"
   image_id        = data.aws_ami.amazon-linux.id
   instance_type   = "t3.micro"
+  iam_instance_profile = aws_iam_instance_profile.cwa_profile.name
   user_data       = file("startup.sh")
   security_groups = [aws_security_group.nginx_instance.id]
 
