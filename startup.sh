@@ -1,8 +1,8 @@
 #!/bin/sh
 ##### Instance ID captured through Instance meta data #####
-InstanceID=`curl -s http://169.254.169.254/latest/meta-data/instance-id`
+InstanceID=`/usr/bin/curl -s http://169.254.169.254/latest/meta-data/instance-id`
 ##### Region captured through Instance meta data #####
-InstanceRegion=`http://169.254.169.254/latest/meta-data/placement/region`
+InstanceRegion=`/usr/bin/curl -s http://169.254.169.254/latest/meta-data/placement/region`
 ##### Set a tag name indicating instance is not configured ####
 aws ec2 create-tags --region $InstanceRegion --resources $InstanceID --tags Key=Initialized,Value=false Key=Updated,Value=false Key=Installed,Value=false
 ##### Install Ansible ######
