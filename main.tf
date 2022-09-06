@@ -27,37 +27,27 @@ data "aws_ami" "amazon-linux" {
   }
 }
 
-
-
 resource "aws_iam_role" "cw_role" {
   name = "cwa_role"
   path = "/"
   assume_role_policy = jsonencode({
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": [
-                "cloudwatch:PutMetricData",
-                "ec2:DescribeVolumes",
-                "ec2:DescribeTags",
-                "logs:PutLogEvents",
-                "logs:DescribeLogStreams",
-                "logs:DescribeLogGroups",
-                "logs:CreateLogStream",
-                "logs:CreateLogGroup"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
-                "ssm:GetParameter"
-            ],
-            "Resource": "arn:aws:ssm:*:*:parameter/AmazonCloudWatch-*"
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Sid    = ""
+        Principal = {
+          Service = "ec2.amazonaws.com"
         }
+      },
     ]
   })
+}
+
+resource "aws_iam_role_policy_attachment" "cwa_policy_attach" {
+    role = aws_iam_role.cw_role.name
+    policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
 }
 
 resource "aws_iam_instance_profile" "cwa_profile" {
