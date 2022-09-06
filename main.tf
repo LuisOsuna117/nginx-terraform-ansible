@@ -17,13 +17,15 @@ module "vpc" {
   enable_dns_support   = true
 }
 
-data "aws_ami" "amazon-linux" {
+data "aws_ami" "amazon-linux-2" {
   most_recent = true
-  owners      = ["amazon"]
-
+  filter {
+    name   = "owner-alias"
+    values = ["amazon"]
+  }
   filter {
     name   = "name"
-    values = ["amzn-ami-hvm-*-x86_64-ebs"]
+    values = ["amzn2-ami-hvm-*-x86_64-ebs"]
   }
 }
 
@@ -57,7 +59,7 @@ resource "aws_iam_instance_profile" "cwa_profile" {
 
 resource "aws_launch_configuration" "nginx" {
   name_prefix     = "nginx-"
-  image_id        = data.aws_ami.amazon-linux.id
+  image_id        = data.aws_ami.amazon-linux-2.id
   instance_type   = "t3.micro"
   iam_instance_profile = aws_iam_instance_profile.cwa_profile.name
   key_name = "test"
@@ -134,7 +136,7 @@ resource "aws_security_group" "nginx_instance" {
     from_port       = 0
     to_port         = 0
     protocol        = "-1"
-    security_groups = [aws_security_group.nginx_lb.id]
+    cidr_blocks     = ["0.0.0.0/0"]
   }
 
   vpc_id = module.vpc.vpc_id
