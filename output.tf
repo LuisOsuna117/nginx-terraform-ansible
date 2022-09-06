@@ -1,5 +1,5 @@
 output "lb_endpoint" {
-  value = "https://${aws_lb.nginx.dns_name}"
+  value = "http://${aws_lb.nginx.dns_name}:8080"
 }
 
 output "asg_name" {

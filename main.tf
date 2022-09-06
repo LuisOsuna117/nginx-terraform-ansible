@@ -62,7 +62,6 @@ resource "aws_launch_configuration" "nginx" {
   image_id        = data.aws_ami.amazon-linux-2.id
   instance_type   = "t3.micro"
   iam_instance_profile = aws_iam_instance_profile.cwa_profile.name
-  key_name = "test"
   user_data       = file("startup.sh")
   security_groups = [aws_security_group.nginx_instance.id]
 
@@ -82,11 +81,6 @@ resource "aws_autoscaling_group" "nginx" {
   tag {
     key                 = "Name"
     value               = "Nginx with Terraform and Ansible"
-    propagate_at_launch = true
-  }
-  tag {
-    key                 = "Initialized"
-    value               = "false"
     propagate_at_launch = true
   }
 }
