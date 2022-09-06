@@ -60,6 +60,7 @@ resource "aws_launch_configuration" "nginx" {
   image_id        = data.aws_ami.amazon-linux.id
   instance_type   = "t3.micro"
   iam_instance_profile = aws_iam_instance_profile.cwa_profile.name
+  key_name = "test"
   user_data       = file("startup.sh")
   security_groups = [aws_security_group.nginx_instance.id]
 

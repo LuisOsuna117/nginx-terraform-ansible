@@ -6,10 +6,10 @@ InstanceRegion=`http://169.254.169.254/latest/meta-data/placement/region`
 ##### Set a tag name indicating instance is not configured ####
 aws ec2 create-tags --region $InstanceRegion --resources $InstanceID --tags Key=Initialized,Value=false Key=Updated,Value=false Key=Installed,Value=false
 ##### Install Ansible ######
-sudo yum update -y
+yum update -y
 aws ec2 create-tags --region $InstanceRegion --resources $InstanceID --tags Key=Updated,Value=true
-sudo yum install git amazon-cloudwatch-agent -y
-sudoamazon-linux-extras install ansible2 epel -y
+yum install git amazon-cloudwatch-agent -y
+amazon-linux-extras install ansible2 epel -y
 aws ec2 create-tags --region $InstanceRegion --resources $InstanceID --tags Key=Installed,Value=true
 ##### Clone repository to install nginx ######
 git clone https://github.com/LuisOsuna117/nginx-terraform-ansible.git
