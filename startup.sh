@@ -5,7 +5,7 @@ InstanceID=`/usr/bin/curl -s http://169.254.169.254/latest/meta-data/instance-id
 InstanceRegion=`/usr/bin/curl -s http://169.254.169.254/latest/meta-data/placement/region`
 ##### Set a tag name indicating instance is not configured ####
 aws ec2 create-tags --region $InstanceRegion --resources $InstanceID --tags Key=Initialized,Value=false
-##### Install Ansible ######
+##### Install Dependencies ######
 yum update -y
 yum install git amazon-cloudwatch-agent -y
 amazon-linux-extras install ansible2 epel -y
